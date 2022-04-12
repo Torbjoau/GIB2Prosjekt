@@ -41,8 +41,12 @@ def kart(request):
     hus=Bolig.objects.all()
     for i in hus:
         g=geolocator.geocode(i.address)
+        html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
+        #html = '<a href="../Bolig/%s"> test </a>'%i.slug
+        iframe = folium.IFrame(html)
+        Popup=folium.Popup(iframe, min_width=200, max_width=800)
 
-        folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='lightgray', icon='home', prefix='fa')).add_to(m)
+        folium.Marker(location=[g.latitude, g.longitude], popup=Popup, icon=folium.Icon(color='lightgray', icon='home')).add_to(m)
 
     m = m._repr_html_()
     context = {
