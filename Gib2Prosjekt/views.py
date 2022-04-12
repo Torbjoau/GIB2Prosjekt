@@ -2,6 +2,7 @@ from django.shortcuts import render
 import folium
 from geopy.geocoders import Nominatim
 from .models import Bolig
+from folium import IFrame
 
 
 # Create your views here.
@@ -13,6 +14,7 @@ def hjem(request):
     list_bolig=Bolig.objects.all()
     return render(request, 'Bolig.html',
         {'list_bolig': list_bolig})
+
 
 
 geolocator=Nominatim(user_agent="my_request")
@@ -34,7 +36,9 @@ def kart(request):
     hus=Bolig.objects.all()
     for i in hus:
         g=geolocator.geocode(i.address)
-        folium.Marker(location=[g.latitude, g.longitude]).add_to(m)
+        iframe=folium.IFrame(i.address)
+        Popup=folium.Popup(iframe,min_width=200,max_width=800)
+        folium.Marker(location=[g.latitude, g.longitude],popup=Popup,icon=folium.Icon(color='red',icon='home')).add_to(m)
 
     m = m._repr_html_()
     context = {

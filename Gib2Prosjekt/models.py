@@ -28,8 +28,8 @@ class Bolig(models.Model):
     #print(lat,long)
 
 
-#class Hus(models.Model):
-    #address = models.CharField(max_length=100)
+class Hus(models.Model):
+    adress = models.CharField(max_length=100)
     #location=geolocator.geocode(address+',Trondheim,Norway')
     #lat=location.latitude
     #long=location.longitude
