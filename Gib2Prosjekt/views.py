@@ -1,3 +1,5 @@
+import base64
+
 from django.shortcuts import render, get_object_or_404
 import folium
 from geopy.geocoders import Nominatim
@@ -41,10 +43,17 @@ def kart(request):
     hus=Bolig.objects.all()
     for i in hus:
         g=geolocator.geocode(i.address)
-        html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
-        #html = '<a href="../Bolig/%s"> test </a>'%i.slug
-        iframe = folium.IFrame(html)
-        Popup=folium.Popup(iframe, min_width=200, max_width=800)
+
+        encoded = base64.b64encode(open("media/" + str(i.image), 'rb').read())
+        #html = '<img src="data:image/jpeg;base64,{}" width=250 height=250>'.format
+        html = f'''
+        
+        <h1 style="color:red;"> {i.address} </h1> 
+        <a href="http://127.0.0.1:8000/Bolig/{i.slug}" target="_blank"> <img src="data:image/jpeg;base64,{{}}" width=250 height=250> </a>
+        
+        '''.format
+        iframe = folium.IFrame(html(encoded.decode('UTF-8')), width=400, height=350)
+        Popup=folium.Popup(iframe, min_width=200, max_width=300)
 
         folium.Marker(location=[g.latitude, g.longitude], popup=Popup, icon=folium.Icon(color='lightgray', icon='home')).add_to(m)
 
