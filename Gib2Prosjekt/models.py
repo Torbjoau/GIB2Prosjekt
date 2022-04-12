@@ -15,7 +15,8 @@ class Bolig(models.Model):
     address = models.CharField(max_length=100)
     desc = models.TextField()
     price=models.DecimalField(max_digits=100,decimal_places=1)
-    slug = AutoSlugField(populate_from="address")
+    image = models.ImageField(upload_to='media', blank=True)
+    slug = AutoSlugField(populate_from='address')
 
     #lat = models.DecimalField(max_digits=9, decimal_places=6) #breddegrad
     #long= models.DecimalField(max_digits=9, decimal_places=6) #lengdegrad
