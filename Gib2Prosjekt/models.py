@@ -1,14 +1,7 @@
 from django.db import models
 from autoslug import AutoSlugField
 #from geopy.geocoders import Nominatim
-# Create your models here.
-#geolocator=Nominatim(user_agent='my_request')
-#ad="Klostergata 1"
-#locat=geolocator.geocode(str(ad)+',Trondheim,Norway')
-#print((locat.latitude, locat.longitude))
-        #lat=location.latitude
-        #long=location.longitude
-        #print(location)
+# Create your models here...
 
 
 class Bolig(models.Model):
@@ -16,6 +9,9 @@ class Bolig(models.Model):
     desc = models.TextField()
     price=models.DecimalField(max_digits=100,decimal_places=1)
     slug = AutoSlugField(populate_from="address")
+    #antall_sovrom = models.IntegerField(default=0)
+    #energi_klasse = models.IntegerField(default=5)
+
 
     #lat = models.DecimalField(max_digits=9, decimal_places=6) #breddegrad
     #long= models.DecimalField(max_digits=9, decimal_places=6) #lengdegrad

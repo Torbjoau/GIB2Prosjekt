@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 import folium
 from geopy.geocoders import Nominatim
 from .models import Bolig
-
+from django.contrib.auth.models import User,auth
+from django.contrib import messages
 
 # Create your views here.
 
@@ -50,3 +51,58 @@ def kart(request):
         'm': m,
     }
     return render(request, 'kart.html', context)
+
+
+def register(request):
+    if request.method == 'POST':
+        first_name=request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        messages.info(request, 'invalid')
+        if password1==password2:
+            if User.objects.filter(username=username).exists():
+                print('username taken')
+                messages.info(request, 'username taken')
+            elif User.objects.filter(email=email).exists():
+                print('email taken')
+
+            else:
+                user=User.objects.create_user(username=username,email=email,password=password1,first_name=first_name,last_name=last_name)
+                user.save();
+                print('user created')
+        else:
+            print('passordene er ikke like')
+            messages.info(request, 'invalid')
+        return redirect('log_in')
+
+    else:
+        return render(request,'register.html')
+
+
+def log_in(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        password=request.POST['password']
+        user=auth.authenticate(username=username,password=password)
+
+        if user is not None:
+            auth.login(request,user)
+            return redirect('index')
+        else:
+            messages.info(request,'invalid')
+            return render(request,'log_in.html')
+
+    else:
+        return render(request,'log_in.html')
+
+
+def log_out(request):
+    auth.logout(request)
+    return redirect('kart')
+
+
+def lage_bolig_annonse(request):
+    return redirect('index')
