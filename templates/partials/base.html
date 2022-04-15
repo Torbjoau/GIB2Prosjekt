@@ -33,19 +33,24 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'Bolig' %}">Bolig</a>
               </li>
-                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">register</a>
-              </li>
 
-                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'log_in' %}">log in</a>
-                  </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <p> HELLO, {{ user.first_name }} </p></li>
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'log_out' %}">log out</a>
                   </li>
-                <li class="nav-item">
+                    <li class="nav-item">
                 <a class="nav-link" href="{% url 'lage_bolig_annonse' %}">lage bolig annonse</a>
                   </li>
+                {% else %}
+                 <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">register</a>
+                </li>
+                 <li class="nav-item">
+                <a class="nav-link" href="{% url 'log_in' %}">log in</a>
+                  </li>
+                {% endif %}
                 <!--
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>

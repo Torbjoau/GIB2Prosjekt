@@ -37,7 +37,7 @@ def kart(request):
     #folium.Marker(location=[p.latitude,p.longitude]).add_to(m)
     hus=Bolig.objects.all()
     for i in hus:
-        g=geolocator.geocode(i.address)
+        g=geolocator.geocode(i.a    ddress)
         html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
         #html = '<a href="../Bolig/%s"> test </a>'%i.slug
         iframe = folium.IFrame(html)
@@ -101,8 +101,19 @@ def log_in(request):
 
 def log_out(request):
     auth.logout(request)
-    return redirect('kart')
+    return redirect('index')
 
 
 def lage_bolig_annonse(request):
-    return redirect('index')
+        if request.method == 'POST':
+            address = request.POST['address']
+            desc = request.POST['desc']
+            price = request.POST['price']
+            hus=Bolig(
+                address=address,
+                desc=desc,
+                price=price)
+            hus.save();
+            return redirect('Bolig')
+        else:
+            return render(request,'lage_bolig_annonse.html')
