@@ -1,0 +1,10 @@
+{% extends 'partials/base.html' %}
+{% block content %}
+    <form action="lage_bolig_annonse" method="post">
+        {% csrf_token %}
+        <input type="text"name="address" placeholder="Adresse i Trondheim(gatenr. og gatenavn)"><br>
+        <input type="number"name="price" placeholder="Salgspris"><br>
+        <input type="text"name="desc" placeholder="Beskrivelse"><br>
+        <input type="submit">
+    </form>
+{% endblock %}

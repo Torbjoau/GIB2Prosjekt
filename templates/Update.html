@@ -1,0 +1,15 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+    <p> Oppdater </p>
+    <li>{{ bolig_update.address }}</li>
+    <li>{{ bolig_update.desc }}</li>
+    <li>{{ bolig_update.price }}</li>
+<br/>
+    <form action="" method="POST">
+    {% csrf_token %}
+        {{ form.as_p }}
+<br/>
+    <input type="submit" value="Oppdater">
+    </form>
+{% endblock %}

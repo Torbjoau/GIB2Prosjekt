@@ -1,15 +1,9 @@
 from django.db import models
 from autoslug import AutoSlugField
 #from geopy.geocoders import Nominatim
-# Create your models here.
-#geolocator=Nominatim(user_agent='my_request')
-#ad="Klostergata 1"
-#locat=geolocator.geocode(str(ad)+',Trondheim,Norway')
-#print((locat.latitude, locat.longitude))
-        #lat=location.latitude
-        #long=location.longitude
-        #print(location)
-
+# Create your models here...
+from django.forms import ModelForm
+from django import forms
 
 class Bolig(models.Model):
     address = models.CharField(max_length=100)
@@ -17,6 +11,9 @@ class Bolig(models.Model):
     price=models.DecimalField(max_digits=100,decimal_places=1)
     image = models.ImageField(upload_to='media', blank=True)
     slug = AutoSlugField(populate_from='address')
+    #antall_sovrom = models.IntegerField(default=0)
+    #energi_klasse = models.IntegerField(default=5)
+
 
     #lat = models.DecimalField(max_digits=9, decimal_places=6) #breddegrad
     #long= models.DecimalField(max_digits=9, decimal_places=6) #lengdegrad
@@ -39,5 +36,18 @@ class Bolig(models.Model):
     #long=location.longitude
 
 
-
+class BoligForm(ModelForm):
+    class Meta:
+        model=Bolig
+        fields = ('desc', 'price')
+        labels={
+            #'address': 'Skriv inn gatenummer og gateaddresse, Obs må være i Trondheim:',
+            'desc': 'Gi en beskrivelse av boligen:',
+            'price': 'Salgspris:',
+        }
+        widgets = {
+            #'address': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Address'}),
+            'desc': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Desc'}),
+            'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Price'}),
+        }
 

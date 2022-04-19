@@ -7,6 +7,15 @@
     <li>{{ bolig_view.price }}</li>
     <img src="{{ bolig_view.image.url }}">
 
-
-
+<br/>
+    <form action="Update" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Oppdater">
+    </form>
+    <br/>
+    <form action="Delete" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Slett">
+    </form>
 {% endblock %}
+
