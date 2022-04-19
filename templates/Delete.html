@@ -1,0 +1,14 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+    <p> Delete </p>
+    <li>{{ bolig_update.address }}</li>
+    <li>{{ bolig_update.desc }}</li>
+    <li>{{ bolig_update.price }}</li>
+<br/>
+    <form action="Delete2" method="POST">
+    {% csrf_token %}
+<br/>
+    <input type="submit" value="Er du sikker?">
+    </form>
+{% endblock %}

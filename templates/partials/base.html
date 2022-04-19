@@ -34,21 +34,24 @@
                 <a class="nav-link" href="{% url 'Bolig' %}">Bolig</a>
               </li>
 
+
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <p> HELLO, {{ user.first_name }} </p></li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'log_out' %}">log out</a>
+                <a class="nav-link" href="{% url 'log_out' %}">Log out</a>
                   </li>
                     <li class="nav-item">
-                <a class="nav-link" href="{% url 'lage_bolig_annonse' %}">lage bolig annonse</a>
+                <a class="nav-link" href="{% url 'lage_bolig_annonse' %}">Lage boligannonse</a>
                   </li>
+                    </li>
+
                 {% else %}
                  <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">register</a>
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
                 </li>
                  <li class="nav-item">
-                <a class="nav-link" href="{% url 'log_in' %}">log in</a>
+                <a class="nav-link" href="{% url 'log_in' %}">Log in</a>
                   </li>
                 {% endif %}
                 <!--

@@ -4,6 +4,7 @@ from geopy.geocoders import Nominatim
 from .models import Bolig
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
+from .models import BoligForm
 
 # Create your views here.
 
@@ -21,6 +22,11 @@ def bolig_view(request, slug):
     bolig_view = get_object_or_404(Bolig, slug=slug)
     return render(request, 'bolig_detail.html', {'bolig_view' : bolig_view})
 
+
+#def update(request, slug):
+#    bolig_view = get_object_or_404(Bolig, slug=slug)
+#    return render(request, 'Update.html', {'bolig_view' : bolig_view})
+
 geolocator=Nominatim(user_agent="my_request")
 
 
@@ -37,7 +43,7 @@ def kart(request):
     #folium.Marker(location=[p.latitude,p.longitude]).add_to(m)
     hus=Bolig.objects.all()
     for i in hus:
-        g=geolocator.geocode(i.a    ddress)
+        g=geolocator.geocode(i.address)
         html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
         #html = '<a href="../Bolig/%s"> test </a>'%i.slug
         iframe = folium.IFrame(html)
@@ -113,7 +119,34 @@ def lage_bolig_annonse(request):
                 address=address,
                 desc=desc,
                 price=price)
-            hus.save();
-            return redirect('Bolig')
+            location1=geolocator.geocode(address+",Trondheim,Norway")
+            try:
+                print((location1.latitude,location1.longitude))
+                hus.save()
+                return redirect('Bolig')
+            except:
+                print("wrong address!")
+                messages.info(request, 'Wrong address!')
+                return render(request,'lage_bolig_annonse.html')
+
         else:
             return render(request,'lage_bolig_annonse.html')
+
+def update(request, slug):
+    bolig_update=get_object_or_404(Bolig, slug=slug)
+    form=BoligForm(request.POST or None, instance=bolig_update)
+    if form.is_valid():
+        form.save()
+        return redirect('Bolig2')
+    return render(request,'Update.html',{'bolig_update': bolig_update,'form':form})
+ #   return render(request,'update.html',{'bolig': bolig_update})
+
+def delete(request, slug):
+    bolig_update = get_object_or_404(Bolig, slug=slug)
+     #bolig_update.delete()
+    return render(request, 'Delete.html', {'bolig_update':bolig_update})
+
+def delete2(request, slug):
+    bolig_update = get_object_or_404(Bolig, slug=slug)
+    bolig_update.delete()
+    return redirect('Bolig')

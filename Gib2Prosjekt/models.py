@@ -2,7 +2,8 @@ from django.db import models
 from autoslug import AutoSlugField
 #from geopy.geocoders import Nominatim
 # Create your models here...
-
+from django.forms import ModelForm
+from django import forms
 
 class Bolig(models.Model):
     address = models.CharField(max_length=100)
@@ -34,5 +35,18 @@ class Bolig(models.Model):
     #long=location.longitude
 
 
-
+class BoligForm(ModelForm):
+    class Meta:
+        model=Bolig
+        fields = ('desc', 'price')
+        labels={
+            #'address': 'Skriv inn gatenummer og gateaddresse, Obs må være i Trondheim:',
+            'desc': 'Gi en beskrivelse av boligen:',
+            'price': 'Salgspris:',
+        }
+        widgets = {
+            #'address': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Address'}),
+            'desc': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Desc'}),
+            'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Price'}),
+        }
 
