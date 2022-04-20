@@ -7,4 +7,9 @@
         <input type="text"name="desc" placeholder="Beskrivelse"><br>
         <input type="submit">
     </form>
+        <div>
+        {% for message in messages %}
+        <h3> {{ message }}</h3>
+        {% endfor %}
+    </div>
 {% endblock %}
