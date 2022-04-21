@@ -1,18 +1,45 @@
 {% extends 'partials/base.html' %}
 {%  block content %}
-    <h1>
-    "Bolig-annonser"
-    </h1>
-    {% for hus in list_bolig %}
 
-        <a href="{% url 'profile' hus.slug %}">{{ hus.address }}</a>
-        <strong>{{ hus }}</strong>
+            <head>
+<style>
+    body{
+        background-color: gainsboro ;
+    }
+    .con{
+        display: flex;
+        flex-flow: row wrap;
+    }
+    .box{
+
+        border: 2px solid #AFAFAF;
+        width: 335px;
+        height: 500px;
+        box-shadow: 5px 8px 8px 4px #888888;
+        background-color: honeydew;
+        font-family: 'JetBrains Mono Medium';
+        font-size: 20px;
+        margin-left: 20px;
+        margin-bottom: 30px;
+        margin-right: 20px;
+        position: sticky;
+        }
+</style>
+</head>
+
+    <h1>
+    Boligannonser
+    </h1>
+<div class="con">
+    {% for hus in list_bolig %}
+    <div class="box">
+    <!--a href="{% url 'profile' hus.slug %}">{{ hus.address }}</a-->
+        <a href="{% url 'profile' hus.slug %}"><img src="{{ hus.image.url }}" width="331px"></a>
+        <!--strong>{{ hus }}</strong-->
         <u1>
             <li> {{ hus.address }} </li>
             <li> {{ hus.desc }} </li>
         </u1>
-        <!--
-
-        -->
-    {%  endfor %}
+{%  endfor %}
+</div>
 {% endblock %}

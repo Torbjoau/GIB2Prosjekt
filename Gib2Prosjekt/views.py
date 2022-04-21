@@ -67,22 +67,20 @@ def register(request):
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        messages.info(request, 'invalid')
         if password1==password2:
             if User.objects.filter(username=username).exists():
-                print('username taken')
                 messages.info(request, 'username taken')
+                return redirect('register')
             elif User.objects.filter(email=email).exists():
-                print('email taken')
-
+                messages.info(request, 'email taken')
+                return redirect('register')
             else:
                 user=User.objects.create_user(username=username,email=email,password=password1,first_name=first_name,last_name=last_name)
                 user.save();
-                print('user created')
+                return redirect('log_in')
         else:
-            print('passordene er ikke like')
-            messages.info(request, 'invalid')
-        return redirect('log_in')
+            messages.info(request, 'passordene er ikke like')
+            return redirect('register')
 
     else:
         return render(request,'register.html')
@@ -98,7 +96,7 @@ def log_in(request):
             auth.login(request,user)
             return redirect('index')
         else:
-            messages.info(request,'invalid')
+            messages.info(request,'Invalid')
             return render(request,'log_in.html')
 
     else:
@@ -150,3 +148,23 @@ def delete2(request, slug):
     bolig_update = get_object_or_404(Bolig, slug=slug)
     bolig_update.delete()
     return redirect('Bolig')
+
+def valg(request):
+    if request.method == 'POST':
+        price = request.POST.get("price")
+        type = request.POST.get("type")
+        area = request.POST.get("area")
+        bedrooms = request.POST.get("bedrooms")
+        energy = request.POST.get("energy")
+        print(price, type, area, bedrooms, energy)
+        l=[]
+        for i in Bolig.objects.all():
+            if (i.price < float(price or 0)) and (i.area > int(area or 0)) and (i.bedroom >= int(bedrooms or 0)) and (i.type == type):
+                l.append(i)
+        print(l)
+        return redirect('kart')
+    else:
+        return render(request, 'valg.html')
+
+
+
