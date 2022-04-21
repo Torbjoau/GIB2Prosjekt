@@ -150,3 +150,23 @@ def delete2(request, slug):
     bolig_update = get_object_or_404(Bolig, slug=slug)
     bolig_update.delete()
     return redirect('Bolig')
+
+def valg(request):
+    if request.method == 'POST':
+        price = request.POST.get("price")
+        type = request.POST.get("type")
+        area = request.POST.get("area")
+        bedrooms = request.POST.get("bedrooms")
+        energy = request.POST.get("energy")
+        print(price, type, area, bedrooms, energy)
+        l=[]
+        for i in Bolig.objects.all():
+            if (i.price < float(price or 0)) and (i.area > int(area or 0)) and (i.bedroom >= int(bedrooms or 0)) and (i.type == type):
+                l.append(i)
+        print(l)
+        return redirect('kart')
+    else:
+        return render(request, 'valg.html')
+
+
+

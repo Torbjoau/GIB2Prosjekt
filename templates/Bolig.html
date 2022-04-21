@@ -1,19 +1,51 @@
 {% extends 'partials/base.html' %}
 {%  block content %}
+
+            <head>
+<style>
+    body{
+        background-color: gainsboro ;
+    }
+    .con{
+        display: flex;
+        flex-flow: row wrap;
+    }
+    .box{
+
+        border: 2px solid #AFAFAF;
+        width: 335px;
+        height: 500px;
+        box-shadow: 5px 8px 8px 4px #888888;
+        background-color: honeydew;
+        font-family: 'JetBrains Mono Medium';
+        font-size: 20px;
+        margin-left: 20px;
+        margin-bottom: 30px;
+        margin-right: 20px;
+        position: sticky;
+        }
+</style>
+</head>
+
     <h1>
-    "Bolig-annonser"
+    Boligannonser
     </h1>
+<div class="con">
     {% for hus in list_bolig %}
-
-        <a href="{% url 'profile' hus.slug %}">{{ hus.address }}</a>
-        <strong>{{ hus }}</strong>
+    <div class="box">
+    <!--a href="{% url 'profile' hus.slug %}">{{ hus.address }}</a-->
+        <a href="{% url 'profile' hus.slug %}"><img src="{{ hus.image.url }}" width="331px"></a>
+        <!--strong>{{ hus }}</strong-->
         <u1>
-            <li> {{ hus.address }} </li>
-            <li> {{ hus.desc }} </li>
-            <li> {{ hus.price }} </li>
-        </u1>
-        <!--
+            <h1 style="font-size: 35px";> {{ hus.address }} </h1>
+            <hr style="color: black">
+            <p style="font-size: 20px; padding-left: 10px"><b>{{ hus.type }} </b></p>
+            <p style="font-size: 20px; padding-left: 10px"><b>{{ hus.price }} kr</b></p>
+            <p style="font-size: 20px; padding-left: 10px"><b>{{ hus.desc }} </b></p>
 
-        -->
-    {%  endfor %}
+        </u1>
+
+    </div>
+{%  endfor %}
+</div>
 {% endblock %}
