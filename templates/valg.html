@@ -1,7 +1,16 @@
 {% extends 'partials/base.html' %}
 {% block content %}
 
-    <div style="margin-left: 20px">
+    <head>
+    <style>
+        .box {
+            width: 450px;
+            height: 100%;
+            background-color: dimgray;
+        }
+    </style>
+    </head>
+    <div style="margin-left: 20px" class="box">
     <form action="" method="POST">
         {% csrf_token %}
         <p> Skriv inn max pris </p>
@@ -76,7 +85,7 @@
   <label class="form-check-label" for="energyG">G</label>
         </div>
         <br>
-        <input type="submit" name="lagre" class="btn btn-success" value="Lagre">
+        <input type="submit" name="Lagre" class="btn btn-success" value="Lagre">
 
         </form>
 </div>
