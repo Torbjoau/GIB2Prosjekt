@@ -35,20 +35,20 @@ geolocator=Nominatim(user_agent="my_request")
 #    print(i.address)
 #    print(geolocator.geocode(i.address))
 
+'''
 def kart(request):
-    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12)
+    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=1800)
     #folium.Marker(location=[63.417190066978264, 10.404224395751953]).add_to(m)
     #folium.Marker(location=[location.latitude,location.longitude]).add_to(m)
     #folium.Marker(location=[l.latitude,l.longitude]).add_to(m)
     #folium.Marker(location=[p.latitude,p.longitude]).add_to(m)
     hus=Bolig.objects.all()
     for i in hus:
-        g=geolocator.geocode(i.address)
+        g=geolocator.geocode(i.address+",Trondheim,Norway")
         html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
         #html = '<a href="../Bolig/%s"> test </a>'%i.slug
         iframe = folium.IFrame(html)
         Popup=folium.Popup(iframe, min_width=200, max_width=800)
-
         folium.Marker(location=[g.latitude, g.longitude], popup=Popup, icon=folium.Icon(color='red', icon='home')).add_to(m)
 
 
@@ -57,6 +57,47 @@ def kart(request):
         'm': m,
     }
     return render(request, 'kart.html', context)
+'''
+
+
+
+
+def kart(request):
+    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=1800)
+    if request.method == 'POST':
+        list = []
+        type = request.POST.get("type")
+        for i in Bolig.objects.all():
+            if i.type == type:
+                list.append(i)
+        #return redirect('kart')
+
+        #hus=Bolig.objects.all()
+        for i in list:
+            g=geolocator.geocode(i.address+",Trondheim,Norway")
+            html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
+            #html = '<a href="../Bolig/%s"> test </a>'%i.slug
+            iframe = folium.IFrame(html)
+            Popup=folium.Popup(iframe, min_width=200, max_width=800)
+            if int(i.price) <= 2000000:
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
+            elif 2000000 < int(i.price) <= 8000000:
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
+            else:
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='darkred', icon_color="gray", icon='home')).add_to(m)
+
+        m = m._repr_html_()
+        context = {
+            'm': m,
+        }
+        return render(request, 'kart.html', context)
+    else:
+        m = m._repr_html_()
+        context = {
+            'm': m,
+        }
+        return render(request, 'kart.html', context)
+
 
 
 def register(request):
@@ -159,7 +200,9 @@ def valg(request):
         print(price, type, area, bedrooms, energy)
         l=[]
         for i in Bolig.objects.all():
-            if (i.price < float(price or 0)) and (i.area > int(area or 0)) and (i.bedroom >= int(bedrooms or 0)) and (i.type == type):
+
+            if (i.price < float(price or 0)) and (i.area > int(area or 0)) and (i.bedroom >= int(bedrooms or 0)) and (i.type == type) and (ord(i.energy) <= ord(energy)):
+            #if i.type == type:
                 l.append(i)
         print(l)
         return redirect('kart')
