@@ -85,7 +85,7 @@ def kart(request):
             #html = '<a href="../Bolig/%s"> test </a>'%i.slug
             iframe = folium.IFrame(html)
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
-            l=1
+            l=0
             nr=0
             if price =='true':
                 if int(i.price) <= 2000000:
@@ -146,6 +146,8 @@ def kart(request):
             if l !=0:
                 nr=int(floor(nr/l))
                 print(nr)
+            else:
+                nr=3
 
             if nr==4:
                 folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(m)
