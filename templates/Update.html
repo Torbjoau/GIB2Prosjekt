@@ -1,15 +1,28 @@
 {% extends 'partials/base.html' %}
 
 {% block content %}
-    <p> Oppdater </p>
-    <li>{{ bolig_update.address }}</li>
-    <li>{{ bolig_update.desc }}</li>
-    <li>{{ bolig_update.price }}</li>
-<br/>
-    <form action="" method="POST">
-    {% csrf_token %}
-        {{ form.as_p }}
-<br/>
-    <input type="submit" value="Oppdater">
-    </form>
+    {% if user.is_authenticated %}
+        <h1>Logget inn bruker er {{ user }}</h1>
+        <h1> Eier av annonse er {{ bolig_update.owner }}</h1>
+        {% if user == bolig_update.owner %}
+            <p> Oppdater </p>
+            <li>{{ bolig_update.address }}</li>
+            <li>{{ bolig_update.desc }}</li>
+            <li>{{ bolig_update.price }}</li>
+            <br/>
+            <form action="" method="POST">
+            {% csrf_token %}
+                {{ form.as_p }}
+            <br/>
+            <input type="submit" value="Oppdater">
+            </form>
+        {% else %}
+            <h1> Du er ikke riktig bruker</h1>
+        {% endif %}
+    {% else %}
+        <h1>
+        Hei, du må være logget inn for å se denne siden.
+        </h1>
+        <a href="{% url 'log_in' %}">Login her </a>
+    {% endif %}
 {% endblock %}

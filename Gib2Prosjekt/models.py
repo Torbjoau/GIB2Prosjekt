@@ -4,18 +4,21 @@ from autoslug import AutoSlugField
 # Create your models here...
 from django.forms import ModelForm
 from django import forms
+from django.contrib.auth.models import User
 
 class Bolig(models.Model):
     address = models.CharField(max_length=100)
     desc = models.TextField()
     price=models.DecimalField(max_digits=100,decimal_places=1)
     slug = AutoSlugField(populate_from="address")
+    owner=models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     image = models.ImageField(upload_to='media', blank=True)
-    type = models.CharField(max_length=20,default='Enebolig')
+    type = models.CharField(max_length=20, default='Enebolig')
     bedroom = models.IntegerField(default=2)
     energy = models.CharField(max_length=1, default='A')
     area = models.IntegerField(default=155)
     year = models.IntegerField(default=2012)
+
     #antall_sovrom = models.IntegerField(default=0)
     #energi_klasse = models.IntegerField(default=5)
 
