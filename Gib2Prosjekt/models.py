@@ -49,7 +49,7 @@ class Bolig(models.Model):
 class BoligForm(ModelForm):
     class Meta:
         model=Bolig
-        fields = ('desc', 'price', 'type', 'bedroom', 'energy', 'area', 'year')
+        fields = ('desc', 'price', 'type', 'bedroom', 'energy', 'area', 'year','image')
         labels={
             #'address': 'Skriv inn gatenummer og gateaddresse, Obs må være i Trondheim:',
             'desc': 'Gi en beskrivelse av boligen:',
@@ -58,7 +58,7 @@ class BoligForm(ModelForm):
             'bedroom': 'antall soverom',
             'energy': 'Energiklassen',
             'area': 'antall kvadratmeter',
-            #'image': ''
+            'image': ''
         }
         widgets = {
             #'address': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Address'}),
@@ -69,6 +69,5 @@ class BoligForm(ModelForm):
             'energy': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'energy'}),
             'area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'area'}),
             'year': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'year'}),
-            #'image': forms.ImageField(attrs={'class': 'form-control', 'placeholder': 'image'})
+            'image': forms.FileInput()
         }
-

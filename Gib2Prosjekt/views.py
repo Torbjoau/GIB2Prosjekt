@@ -102,7 +102,7 @@ def kart(request):
 
 
 
-            Popup=folium.Popup(iframe, min_width=200, max_width=800)
+            #Popup=folium.Popup(iframe, min_width=200, max_width=800)
 
             l=0
             nr=0
@@ -169,13 +169,14 @@ def kart(request):
                 nr=3
 
             if nr==4:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='darkred', icon='home')).add_to(m)
             elif nr==3:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='red', icon='home')).add_to(m)
             elif nr==2:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='lightred', icon='home')).add_to(m)
             else:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='white', icon_color="gray", icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='white', icon_color="gray", icon='home')).add_to(m)
+                #location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
 
         m = m._repr_html_()
         context = {
@@ -297,6 +298,8 @@ def update(request, slug):
         return redirect('Bolig')
     return render(request,'Update.html',{'bolig_update': bolig_update,'form':form})
  #   return render(request,'update.html',{'bolig': bolig_update})
+
+
 
 def delete(request, slug):
     bolig_update = get_object_or_404(Bolig, slug=slug)
