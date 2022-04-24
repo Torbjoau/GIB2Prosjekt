@@ -5,13 +5,15 @@ from autoslug import AutoSlugField
 from django.forms import ModelForm
 from django import forms
 from django.contrib.auth.models import User
+from django.conf import settings
+
 
 class Bolig(models.Model):
     address = models.CharField(max_length=100)
     desc = models.TextField()
     price=models.DecimalField(max_digits=100,decimal_places=1)
     slug = AutoSlugField(populate_from="address")
-    owner=models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    owner=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     image = models.ImageField(upload_to='media', blank=True)
     type = models.CharField(max_length=20, default='Enebolig')
     bedroom = models.IntegerField(default=2)
@@ -47,15 +49,26 @@ class Bolig(models.Model):
 class BoligForm(ModelForm):
     class Meta:
         model=Bolig
-        fields = ('desc', 'price')
+        fields = ('desc', 'price', 'type', 'bedroom', 'energy', 'area', 'year')
         labels={
             #'address': 'Skriv inn gatenummer og gateaddresse, Obs må være i Trondheim:',
             'desc': 'Gi en beskrivelse av boligen:',
             'price': 'Salgspris:',
+            'type': 'Type bolig',
+            'bedroom': 'antall soverom',
+            'energy': 'Energiklassen',
+            'area': 'antall kvadratmeter',
+            #'image': ''
         }
         widgets = {
             #'address': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Address'}),
             'desc': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Desc'}),
             'price': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Price'}),
+            'type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Type'}),
+            'bedroom': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Bedroom'}),
+            'energy': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'energy'}),
+            'area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'area'}),
+            'year': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'year'}),
+            #'image': forms.ImageField(attrs={'class': 'form-control', 'placeholder': 'image'})
         }
 

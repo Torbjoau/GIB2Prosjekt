@@ -6,6 +6,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from .models import BoligForm
 from math import floor
+import base64
 
 # Create your views here.
 
@@ -64,13 +65,18 @@ def kart(request):
 
 
 def kart(request):
-    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=1800)
+    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=1000)
     if request.method == 'POST':
+        alle = request.POST.get('alle')
         list = []
-        type = request.POST.get("type")
-        for i in Bolig.objects.all():
-            if i.type == type:
+        if alle =='true':
+            for i in Bolig.objects.all():
                 list.append(i)
+        else:
+            type = request.POST.get("type")
+            for i in Bolig.objects.all():
+                if i.type == type:
+                    list.append(i)
         #return redirect('kart')
         price = request.POST.get("price_telle")
         type = request.POST.get("type")
@@ -81,10 +87,23 @@ def kart(request):
         #hus=Bolig.objects.all()
         for i in list:
             g=geolocator.geocode(i.address+",Trondheim,Norway")
-            html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
-            #html = '<a href="../Bolig/%s"> test </a>'%i.slug
-            iframe = folium.IFrame(html)
+
+            #encoded = base64.b64encode(open("media/" + str(i.image), 'rb').read())
+            # html = '<img src="data:image/jpeg;base64,{}" width=250 height=250>'.format
+            #html = f'''
+
+                    #<h1 style="color:red;"> {i.address} </h1>
+                    #<a href="http://127.0.0.1:8000/Bolig/{i.slug}" target="_blank"> <img src="data:image/jpeg;base64,{{}}" width=250 height=250> </a>
+
+                    #'''.format
+            #iframe = folium.IFrame(html(encoded.decode('UTF-8')), width=400, height=350)
+
+
+
+
+
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
+
             l=0
             nr=0
             if price =='true':
@@ -150,9 +169,9 @@ def kart(request):
                 nr=3
 
             if nr==4:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(m)
             elif nr==3:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
             elif nr==2:
                 folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
             else:
@@ -223,22 +242,45 @@ def log_out(request):
 
 def lage_bolig_annonse(request):
         if request.method == 'POST':
+            owner= request.user
             address = request.POST['address']
             desc = request.POST['desc']
             price = request.POST['price']
+            image = request.POST['image']
+            type = request.POST['type']
+            energy = request.POST['energy']
+            area = request.POST['area']
+            year = request.POST['year']
+            bedroom=request.POST['bedroom']
+
             hus=Bolig(
                 address=address,
                 desc=desc,
-                price=price)
+                price=price,
+                owner=owner,
+                image=image,
+                type=type,
+                bedroom=bedroom,
+                energy=energy,
+                area=area,
+                year=year
+            )
             location1=geolocator.geocode(address+",Trondheim,Norway")
+            print(location1)
+            print(address)
+            print((location1.latitude,location1.longitude))
             try:
                 print((location1.latitude,location1.longitude))
                 if Bolig.objects.filter(address=address).exists():
                     messages.info(request,'Addresse er opptatt')
                     return redirect('lage_bolig_annonse')
+                    print('exists')
                 else:
                     hus.save()
+                    print('hello1')
                     return redirect('Bolig')
+                    print('saved')
+                print('hello2')
             except:
                 print("wrong address!")
                 messages.info(request, 'Wrong address!')
