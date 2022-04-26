@@ -3,14 +3,18 @@
 
     <head>
     <style>
+        *{margin: 0; padding: 0; border: 0; box-sizing: border-box;}
         .box {
             width: 450px;
             height: 100%;
             background-color: white;
         }
+
+
     </style>
     </head>
-    <div style="margin-left: 20px" class="box">
+<body>
+    <div style="margin-left: 20px" class="box" float="left">
     <form action="" method="POST">
         {% csrf_token %}
         <p> Skriv inn max pris </p>
@@ -89,5 +93,7 @@
 
         </form>
 </div>
+
+
 
 {% endblock %}

@@ -13,6 +13,6 @@ urlpatterns = [
     path('Bolig/<slug:slug>/Update', views.update, name='Update'),
     path('Bolig/<slug:slug>/Delete', views.delete, name='Delete'),
     path('Bolig/<slug:slug>/Delete2', views.delete2, name='Delete2'),
-    path('valg/', views.valg, name='valg'),
+    #path('valg/', views.valg, name='valg'),
     #path('Bolig2/<slug:slug>/', views.update, name='update'),
 ]

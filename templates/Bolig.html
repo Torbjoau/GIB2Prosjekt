@@ -37,9 +37,13 @@
         <a href="{% url 'profile' hus.slug %}"><img src="{{ hus.image.url }}" width="331px"></a>
         <!--strong>{{ hus }}</strong-->
         <u1>
-            <li> {{ hus.address }} </li>
-            <li> {{ hus.desc }} </li>
+            <h1 style="font-size: 35px";> {{ hus.address }} </h1>
+            <hr style="color: black">
+            <p style="font-size: 20px; padding-left: 10px"><b>{{ hus.type }} </b></p>
+            <p style="font-size: 20px; padding-left: 10px"><b> Prisantydning: {{ hus.price }} kr</b></p>
+            <p style="font-size: 20px; padding-left: 10px"><b>{{ hus.desc }} </b></p>
         </u1>
+    </div>
 {%  endfor %}
 </div>
 {% endblock %}
