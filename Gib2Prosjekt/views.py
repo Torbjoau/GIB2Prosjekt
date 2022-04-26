@@ -5,7 +5,13 @@ from .models import Bolig
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from .models import BoligForm
+<<<<<<< HEAD
 import math
+=======
+from math import floor
+import base64
+
+>>>>>>> 3cd34dde771afee3fb193f89bdf605ac1924fdd1
 # Create your views here.
 
 def index(request):
@@ -49,7 +55,7 @@ def kart(request):
         #html = '<a href="../Bolig/%s"> test </a>'%i.slug
         iframe = folium.IFrame(html)
         Popup=folium.Popup(iframe, min_width=200, max_width=800)
-        folium.Marker(location=[g.latitude, g.longitude], popup=Popup, icon=folium.Icon(color='red', icon='home')).add_to(m)
+        folium.Marker(location=[g.latitude, g.longitude], popup=Popup, icon=folium.Icon(color='red',style='white', icon='home')).add_to(m)
 
 
     m = m._repr_html_()
@@ -63,35 +69,130 @@ def kart(request):
 
 
 def kart(request):
-    minVal = 4000000
-    minRadius = 8
-    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=900)
-    if request.method == 'POST':
-        list = []
-        type = request.POST.get("type")
-        for i in Bolig.objects.all():
-            if i.type == type:
-                list.append(i)
-        #return redirect('kart')
 
+    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=1000)
+    if request.method == 'POST':
+        alle = request.POST.get('alle')
+        list = []
+        if alle =='true':
+            for i in Bolig.objects.all():
+                list.append(i)
+        else:
+            type = request.POST.get("type")
+            for i in Bolig.objects.all():
+                if i.type == type:
+                    list.append(i)
+        #return redirect('kart')
+        price = request.POST.get("price_telle")
+        type = request.POST.get("type")
+        area = request.POST.get("area_telle")
+        bedroom = request.POST.get("bedroom_telle")
+        energy = request.POST.get("energy_telle")
+        year = request.POST.get("year_telle")
         #hus=Bolig.objects.all()
         for i in list:
             g=geolocator.geocode(i.address+",Trondheim,Norway")
             html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
-            #html = '<a href="../Bolig/%s"> test </a>'%i.slug
             iframe = folium.IFrame(html)
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
 
-            #psykologisk radius-skalering
-            #r = 10**(0.57*(math.log(i.price/100000)-math.log(M0)))
-            #r = 1.0083 * math.pow(i.price/minVal, .5716) * minRadius
+            #encoded = base64.b64encode(open("media/" + str(i.image), 'rb').read())
+            # html = '<img src="data:image/jpeg;base64,{}" width=250 height=250>'.format
+            #html = f'''
+
+                    #<h1 style="color:red;"> {i.address} </h1>
+                    #<a href="http://127.0.0.1:8000/Bolig/{i.slug}" target="_blank"> <img src="data:image/jpeg;base64,{{}}" width=250 height=250> </a>
+
+                    #'''.format
+            #iframe = folium.IFrame(html(encoded.decode('UTF-8')), width=400, height=350)
+
+
+
+
+
+            #Popup=folium.Popup(iframe, min_width=200, max_width=800)
+
+            l=0
+            nr=0
+            if price =='true':
+                if int(i.price) <= 2000000:
+                    nr_p=4
+                elif 2000000 < int(i.price) <= 5000000:
+                    nr_p=3
+                elif 5000000 < int(i.price) <= 9000000:
+                    nr_p=2
+                else:
+                    nr_p=1
+                l+=1
+                nr+=nr_p
+
+            if energy == 'true':
+                if str(i.energy) =='A':
+                    nr_e=4
+                elif str(i.energy) == 'B':
+                    nr_e=3
+                elif str(i.price) == 'C':
+                    nr_e=2
+                else:
+                    nr_e=1
+                l+=1
+                nr+=nr_e
+            if area == 'true':
+                if int(i.area) >= 120:
+                    nr_a=4
+                elif 80 < int(i.area) <= 120:
+                    nr_a=3
+                elif 40 < int(i.area) <= 80:
+                    nr_a=2
+                else:
+                    nr_a=1
+                l+=1
+                nr+=nr_a
+            if year == 'true':
+                if int(i.year) >= 2010:
+                    nr_y = 4
+                elif 1990 < int(i.year) <= 2010:
+                    nr_y = 3
+                elif 1960 < int(i.year) <= 1990:
+                    nr_y = 2
+                else:
+                    nr_y = 1
+                l += 1
+                nr += nr_y
+            if bedroom == 'true':
+                if int(i.bedroom) >= 4:
+                    nr_b = 4
+                elif 3 < int(i.year) <= 4:
+                    nr_b = 3
+                elif 2 < int(i.year) <= 3:
+                    nr_b = 2
+                else:
+                    nr_b = 1
+                l += 1
+                nr += nr_b
+            if l !=0:
+                nr=int(floor(nr/l))
+                print(nr)
+            else:
+                nr=3
+
+            if nr==4:
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='darkred', icon='home')).add_to(m)
+            elif nr==3:
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='red', icon='home')).add_to(m)
+            elif nr==2:
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='lightred', icon='home')).add_to(m)
+            else:
+                folium.Marker(location=[g.latitude, g.longitude], icon=folium.Icon(color='white', icon_color="gray", icon='home')).add_to(m)
+                #location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
+
             if int(i.price) <= 2000000:
                 folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
             elif 2000000 < int(i.price) <= 8000000:
                 folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
             else:
                 folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon_color="gray", icon='home')).add_to(m)
-            #folium.CircleMarker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", fill=True, fill_color="black", fill_opacity=1, color="grey", radius=r).add_to(m)
+
         m = m._repr_html_()
         context = {
             'm': m,
@@ -167,18 +268,45 @@ def log_out(request):
 
 def lage_bolig_annonse(request):
         if request.method == 'POST':
+            owner= request.user
             address = request.POST['address']
             desc = request.POST['desc']
             price = request.POST['price']
+            image = request.POST['image']
+            type = request.POST['type']
+            energy = request.POST['energy']
+            area = request.POST['area']
+            year = request.POST['year']
+            bedroom=request.POST['bedroom']
+
             hus=Bolig(
                 address=address,
                 desc=desc,
-                price=price)
+                price=price,
+                owner=owner,
+                image=image,
+                type=type,
+                bedroom=bedroom,
+                energy=energy,
+                area=area,
+                year=year
+            )
             location1=geolocator.geocode(address+",Trondheim,Norway")
+            print(location1)
+            print(address)
+            print((location1.latitude,location1.longitude))
             try:
                 print((location1.latitude,location1.longitude))
-                hus.save()
-                return redirect('Bolig')
+                if Bolig.objects.filter(address=address).exists():
+                    messages.info(request,'Addresse er opptatt')
+                    return redirect('lage_bolig_annonse')
+                    print('exists')
+                else:
+                    hus.save()
+                    print('hello1')
+                    return redirect('Bolig')
+                    print('saved')
+                print('hello2')
             except:
                 print("wrong address!")
                 messages.info(request, 'Wrong address!')
@@ -192,9 +320,11 @@ def update(request, slug):
     form=BoligForm(request.POST or None, instance=bolig_update)
     if form.is_valid():
         form.save()
-        return redirect('Bolig2')
+        return redirect('Bolig')
     return render(request,'Update.html',{'bolig_update': bolig_update,'form':form})
  #   return render(request,'update.html',{'bolig': bolig_update})
+
+
 
 def delete(request, slug):
     bolig_update = get_object_or_404(Bolig, slug=slug)

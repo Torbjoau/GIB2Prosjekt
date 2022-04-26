@@ -21,6 +21,12 @@
      <div style="margin-left: 20px" class="box">
     <form action="" method="POST">
         {% csrf_token %}
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="alle" id="alle" value="true">
+            <label class="form-check-label" for="alle">alle</label>
+        </div>
+
                 <p> Velg type bolig</p>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="type" id="type1" value="Enebolig">
@@ -28,7 +34,7 @@
         </div>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="type" id="type2" value="Leilighet">
-            <label class="form-check-label" for="type2">Leilighet</label>
+            <label class="  form-check-label" for="type2">Leilighet</label>
         </div>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="type" id="type3" value="Rekkehus">
@@ -37,65 +43,42 @@
         <br>
         <br>
         <br>
+
         <p> Skriv inn max pris </p>
         <input type="integer" id="price" name="price" placeholder="Skriv inn max pris" maxlength="10">
         <br />
 
-        <p> Skriv inn minimum areal </p>
-        <input type="integer" id="area" name= "area" placeholder="Skriv inn minimum areal" maxlength="4">
-        <br />
-        <p> Velg minimum antall soverom</p>
+        <p> Hvilke parametere er viktig for deg?</p>
+        <p> Hak dem av</p>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="bedrooms" id="inlineRadio1" value="1">
-            <label class="form-check-label" for="inlineRadio1">1</label>
-        </div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="bedrooms" id="inlineRadio2" value="2">
-  <label class="form-check-label" for="inlineRadio2">2</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="bedrooms" id="inlineRadio3" value="3">
-  <label class="form-check-label" for="inlineRadio3">3</label>
-</div>
-        <div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="bedrooms" id="inlineRadio4" value="4">
-  <label class="form-check-label" for="inlineRadio4">4</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="bedrooms" id="inlineRadio5" value="5">
-  <label class="form-check-label" for="inlineRadio5">5</label>
-</div>
-    <br>
-    <p> Velg minimum energikarakter</p>
-           <div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyA" value="A">
-  <label class="form-check-label" for="energyA">A</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyB" value="B">
-  <label class="form-check-label" for="energyB">B</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyC" value="C">
-  <label class="form-check-label" for="energyC">C</label>
-</div>
-        <div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyD" value="D">
-  <label class="form-check-label" for="energyD">D</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyE" value="E">
-  <label class="form-check-label" for="energyE">E</label>
-</div>
-            <div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyF" value="F">
-  <label class="form-check-label" for="energyF">F</label>
-</div>
-<div class="form-check form-check-inline">
-  <input class="form-check-input" type="radio" name="energy" id="energyG" value="G">
-  <label class="form-check-label" for="energyG">G</label>
+            <input class="form-check-input" type="radio" name="price_telle" id="pris" value="true">
+            <label class="form-check-label" for="pris">Lav pris</label>
         </div>
         <br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="area_telle" id="area" value="true">
+            <label class="form-check-label" for="area">Stort areal</label>
+        </div>
+        <br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="energy_telle" id="energy" value="true">
+            <label class="form-check-label" for="energy">Høy energiklasse</label>
+        </div>
+        <br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="year_telle" id="year" value="true">
+            <label class="form-check-label" for="year">Nytt hus</label>
+        </div>
+        <br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="bedroom_telle" id="bedroom" value="true">
+            <label class="form-check-label" for="bedroom">Mange soverom</label>
+        </div>
+        <br>
+        <br>
+        <p>De med sterk rødfarge oppfyller dine parametere best</p>
+        <br>
+        </div>
         <input type="submit" name="Lagre" class="btn btn-success" value="Vis i kart">
 
         </form>
