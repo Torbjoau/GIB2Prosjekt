@@ -5,7 +5,7 @@ from .models import Bolig
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from .models import BoligForm
-
+import math
 # Create your views here.
 
 def index(request):
@@ -63,7 +63,9 @@ def kart(request):
 
 
 def kart(request):
-    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=1800)
+    minVal = 4000000
+    minRadius = 8
+    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=900)
     if request.method == 'POST':
         list = []
         type = request.POST.get("type")
@@ -79,19 +81,33 @@ def kart(request):
             #html = '<a href="../Bolig/%s"> test </a>'%i.slug
             iframe = folium.IFrame(html)
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
-            if int(i.price) <= 2000000:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
-            elif 2000000 < int(i.price) <= 8000000:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
-            else:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer infromasjon", icon=folium.Icon(color='darkred', icon_color="gray", icon='home')).add_to(m)
 
+            #psykologisk radius-skalering
+            #r = 10**(0.57*(math.log(i.price/100000)-math.log(M0)))
+            #r = 1.0083 * math.pow(i.price/minVal, .5716) * minRadius
+            if int(i.price) <= 2000000:
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
+            elif 2000000 < int(i.price) <= 8000000:
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
+            else:
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon_color="gray", icon='home')).add_to(m)
+            #folium.CircleMarker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", fill=True, fill_color="black", fill_opacity=1, color="grey", radius=r).add_to(m)
         m = m._repr_html_()
         context = {
             'm': m,
         }
         return render(request, 'kart.html', context)
     else:
+        hus=Bolig.objects.all()
+        for i in hus:
+            g=geolocator.geocode(i.address+",Trondheim,Norway")
+            html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
+            #html = '<a href="../Bolig/%s"> test </a>'%i.slug
+            iframe = folium.IFrame(html)
+            Popup=folium.Popup(iframe, min_width=200, max_width=800)
+            folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon",
+                          icon=folium.Icon(color='darkred', icon_color="gray", icon='home')).add_to(m)
+
         m = m._repr_html_()
         context = {
             'm': m,

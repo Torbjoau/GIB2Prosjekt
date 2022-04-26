@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Gib2Prosjekt',
+        'NAME': 'gib2prosjekt',
         'USER': 'postgres',
         'PASSWORD': '1234',
         'HOST': 'localhost',
