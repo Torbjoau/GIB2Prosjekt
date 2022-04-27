@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 import folium
+from folium.plugins import MarkerCluster
 import numpy as np
 from geopy.geocoders import Nominatim
 from .models import Bolig
@@ -70,8 +71,10 @@ def kart(request):
 
 def kart(request):
 
+
     form_inputs = cgi.FieldStorage()
     m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width='100%')
+    marker_cluster = MarkerCluster().add_to(m)
     if request.method == 'POST':
         list = []
         type = request.POST.get("type")
@@ -243,13 +246,13 @@ def kart(request):
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
 
             if list_points[i] >= min_points + 3*(max_points-min_points)/4:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(marker_cluster)
             elif min_points + (max_points-min_points)/2 <= list_points[i] < min_points + 3*(max_points-min_points)/4:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(marker_cluster)
             elif min_points + (max_points - min_points)/4 <= list_points[i] < min_points + (max_points - min_points)/2:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(marker_cluster)
             else:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='white', icon='home')).add_to(m)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='white', icon='home')).add_to(marker_cluster)
             
             i += 1
         m = m._repr_html_()
@@ -274,7 +277,7 @@ def kart(request):
             # iframe = folium.IFrame(html)
             Popup = folium.Popup(iframe, min_width=200, max_width=800)
             folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon",
-                          icon=folium.Icon(color='red', icon='home')).add_to(m)
+                          icon=folium.Icon(color='red', icon='home')).add_to(marker_cluster)
 
         m = m._repr_html_()
         context = {
