@@ -14,7 +14,7 @@ class Bolig(models.Model):
     price=models.DecimalField(max_digits=100,decimal_places=1)
     slug = AutoSlugField(populate_from="address")
     owner=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
-    image = models.ImageField(upload_to='media', blank=True)
+    image = models.ImageField(upload_to='images/', blank=True)
     type = models.CharField(max_length=20, default='Enebolig')
     bedroom = models.IntegerField(default=2)
     energy = models.CharField(max_length=1, default='A')
@@ -49,7 +49,7 @@ class Bolig(models.Model):
 class BoligForm(ModelForm):
     class Meta:
         model=Bolig
-        fields = ('desc', 'price', 'type', 'bedroom', 'energy', 'area', 'year','image')
+        fields = ('desc', 'price', 'type', 'bedroom', 'energy', 'area', 'year')
         labels={
             #'address': 'Skriv inn gatenummer og gateaddresse, Obs må være i Trondheim:',
             'desc': 'Gi en beskrivelse av boligen:',

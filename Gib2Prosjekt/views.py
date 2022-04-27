@@ -71,7 +71,7 @@ def kart(request):
 def kart(request):
 
     form_inputs = cgi.FieldStorage()
-    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width=900)
+    m = folium.Map(location=[63.417190066978264, 10.404224395751953], zoom_start=12, hight=600, width='100%')
     if request.method == 'POST':
         list = []
         type = request.POST.get("type")
@@ -94,9 +94,16 @@ def kart(request):
         tot_max_price = max(price_list)
         tot_min_price = min(price_list)
         print("maks pris: ", tot_max_price, " min pris: ", tot_min_price)
-        for i in Bolig.objects.all():
-            if ((i.price < float(price or 0) or form_inputs.getvalue("price") is None )) and (i.area > int(area or 0)) and (i.bedroom >= int(bedroom or 0)) and ((i.type == type)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
-                list.append(i)
+
+        if type == 'alle':
+            for i in Bolig.objects.all():
+                if ((i.price < float(price or 0) or form_inputs.getvalue("price") is None )) and (i.area > int(area or 0)) and (i.bedroom >= int(bedroom or 0)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
+                    list.append(i)
+        else:
+            for i in Bolig.objects.all():
+                if ((i.price < float(price or 0) or form_inputs.getvalue("price") is None )) and (i.area > int(area or 0)) and i.type == type and (i.bedroom >= int(bedroom or 0)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
+                    list.append(i)
+
 
         #return redirect('kart')
         print(list)
@@ -130,19 +137,25 @@ def kart(request):
                     points += 1*2
             print("Poeng energi: ", points)
 
-            if int(bedroom or 0) == 0:
+            if int(bedroom or 0) != 0 and bedroom1 == "true":
+                print("alt1_sov")
+                if i.bedroom == 5:
+                    points += 3
+                elif i.bedroom == 4 or i.bedroom == 3:
+                    points += 2
+                else:
+                    points += 1
+            elif int(bedroom or 0) == 0 and bedroom1 != "true":
+                print("alt2_sov")
                 points += 0
-            else:
+            elif int(bedroom or 0) != 0 and bedroom1 != "true":
+                print("alt3_sov")
                 if i.bedroom == int(bedroom):
-                    pointsBedroom = 3
-                elif i.bedroom == (int(bedroom)+1):
-                    pointsBedroom = 2
+                    points += 3
+                elif i.bedroom == (int(bedroom) + 1):
+                    points += 2
                 else:
-                    pointsBedroom = 1
-                if bedroom1 == "true":
-                    points += 2*pointsBedroom
-                else:
-                    points += pointsBedroom
+                    points += 1
 
             #Dersom byggeår er gitt og ikke ønsker nytt hus
             if int(year or 0) != 0 and year1 != "true":
@@ -248,12 +261,20 @@ def kart(request):
         hus=Bolig.objects.all()
         for i in hus:
             g=geolocator.geocode(i.address+",Trondheim,Norway")
-            html = folium.Html('<a href="http://127.0.0.1:8000/Bolig/' + i.slug + '" target="_blank">' + i.address + '</a>', script=True)
-            #html = '<a href="../Bolig/%s"> test </a>'%i.slug
-            iframe = folium.IFrame(html)
-            Popup=folium.Popup(iframe, min_width=200, max_width=800)
+            encoded = base64.b64encode(open("media/" + str(i.image), 'rb').read())
+            # html = '<img src="data:image/jpeg;base64,{}" width=250 height=250>'.format
+            html = f'''
+
+                                <h1 style="font-family: 'Century Gothic'"> {i.address} </h1>
+                                <a href="http://127.0.0.1:8000/Bolig/{i.slug}" target="_blank"> <img src="data:image/jpeg;base64,{{}}" height=250> </a>
+
+                                '''.format
+            iframe = folium.IFrame(html(encoded.decode('UTF-8')), width=400, height=350)
+
+            # iframe = folium.IFrame(html)
+            Popup = folium.Popup(iframe, min_width=200, max_width=800)
             folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon",
-                          icon=folium.Icon(color='darkred', icon_color="gray", icon='home')).add_to(m)
+                          icon=folium.Icon(color='red', icon='home')).add_to(m)
 
         m = m._repr_html_()
         context = {
@@ -318,7 +339,8 @@ def lage_bolig_annonse(request):
             address = request.POST['address']
             desc = request.POST['desc']
             price = request.POST['price']
-            image = request.POST['image']
+            image = request.FILES['image']
+
             type = request.POST['type']
             energy = request.POST['energy']
             area = request.POST['area']

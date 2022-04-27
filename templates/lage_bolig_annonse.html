@@ -1,12 +1,12 @@
 {% extends 'partials/base.html' %}
 {% block content %}
-    <form action="lage_bolig_annonse" method="post">
+    <form action="lage_bolig_annonse" method="post", enctype="multipart/form-data">
         {% csrf_token %}
         <input type="text"name="address" placeholder="Adresse i Trondheim(gatenr. og gatenavn)"><br>
         <input type="number"name="price" placeholder="Salgspris"><br>
         <input type="text"name="desc" placeholder="Beskrivelse"><br>
 
-        <input type="file" id="img" name="image" accept="image/png, image/jpeg"><br>
+        <input type="file" id="img" name="image" accept="image/*"><br>
 
 
         <label for="type">Boligtype</label>

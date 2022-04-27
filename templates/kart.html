@@ -11,7 +11,6 @@
             height: 100%;
 
             margin-top: 20px;
->>>>>>> kart
         }
          #container {
             min-height: 100vh;
@@ -64,6 +63,10 @@
         {% csrf_token %}
                 <p> Velg type bolig</p>
         <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="type" id="type1" value="alle">
+            <label class="form-check-label" for="type0">Alle</label>
+        </div>
+        <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="type" id="type1" value="Enebolig">
             <label class="form-check-label" for="type1">Enebolig</label>
         </div>
@@ -75,9 +78,6 @@
             <input class="form-check-input" type="radio" name="type" id="type3" value="Rekkehus">
             <label class="form-check-label" for="type3">Rekkehus</label>
         </div>
-        <br>
-        <br>
-        <br>
         <br>
         <table>
         <tr style="height: 50px"><td>Pris</td><td><input class="field" type="integer" id="price" name="price" placeholder="Skriv inn makspris" maxlength="10" style="width: 250px"></td> </tr>
@@ -143,7 +143,7 @@
         <br>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" name="bedroom_telle" id="bedroom_telle" value="true">
-            <label class="form-check-label" for="bedroom">Antall soverom</label>
+            <label class="form-check-label" for="bedroom">Mange soverom</label>
         </div>
         <br />
         <br />
