@@ -342,7 +342,7 @@ def lage_bolig_annonse(request):
             address = request.POST['address']
             desc = request.POST['desc']
             price = request.POST['price']
-            #image = request.FILES['image']
+            image = request.FILES['image']
 
             type = request.POST['type']
             energy = request.POST['energy']
@@ -355,7 +355,7 @@ def lage_bolig_annonse(request):
                 desc=desc,
                 price=price,
                 owner=owner,
-                #image=image,
+                image=image,
                 type=type,
                 bedroom=bedroom,
                 energy=energy,
