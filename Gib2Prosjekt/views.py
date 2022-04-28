@@ -24,7 +24,6 @@ def hjem(request):
     return render(request, 'Bolig.html',
         {'list_bolig': list_bolig})
 
-print('hello')
 
 def bolig_view(request, slug):
     bolig_view = get_object_or_404(Bolig, slug=slug)
@@ -71,7 +70,6 @@ def kart(request):
             price_list.append(i.price)
         tot_max_price = max(price_list)
         tot_min_price = min(price_list)
-        print("maks pris: ", tot_max_price, " min pris: ", tot_min_price)
 
         if type == 'alle':
             for i in Bolig.objects.all():
@@ -84,25 +82,25 @@ def kart(request):
 
 
         #return redirect('kart')
-        print(list)
-        print(float(price or 0))
-        print(int(year or 0))
-        print(type)
+        #print(list)
+        #print(float(price or 0))
+        #print(int(year or 0))
+        #print(type)
         #hus=Bolig.objects.all()
 
         max_points = 0
         min_points = 99999999999
         list_points = []
         for i in list:
-            print("NY BOLIG")
+            #print("NY BOLIG")
             points = 0
             # Ikke valgt energiklasse eller huket av
             if energy is None and energy1 != "true":
-                print('alt3_energi')
+                #print('alt3_energi')
                 points += 0
             #Dersom energiklasse er valgt, men ikke huket av for høy energiklasse
             elif energy1 != "true" and energy != "true":
-                print("alt1_energi")
+                #print("alt1_energi")
                 if i.energy == 'A' or i.energy == 'B':
                     points += 3
                 elif i.energy == 'C' or i.energy == 'D':
@@ -117,10 +115,9 @@ def kart(request):
                     points += 2*2
                 else:
                     points += 1*2
-            print("Poeng energi: ", points)
 
             if int(bedroom or 0) != 0 and bedroom1 == "true":
-                print("alt1_sov")
+                #print("alt1_sov")
                 if i.bedroom == 5:
                     points += 3
                 elif i.bedroom == 4 or i.bedroom == 3:
@@ -128,10 +125,10 @@ def kart(request):
                 else:
                     points += 1
             elif int(bedroom or 0) == 0 and bedroom1 != "true":
-                print("alt2_sov")
+                #print("alt2_sov")
                 points += 0
             elif int(bedroom or 0) != 0 and bedroom1 != "true":
-                print("alt3_sov")
+                #print("alt3_sov")
                 if i.bedroom == int(bedroom):
                     points += 3
                 elif i.bedroom == (int(bedroom) + 1):
@@ -141,7 +138,7 @@ def kart(request):
 
             #Dersom byggeår er gitt og ikke ønsker nytt hus
             if int(year or 0) != 0 and year1 != "true":
-                print("alt1_bygg")
+                #print("alt1_bygg")
                 if i.year >= int(year or 0)+15:
                     points += 3
                 elif int(year)+10 <= i.year < int(year or 0)+15:
@@ -150,7 +147,7 @@ def kart(request):
                     points += 1
             #Dersom byggeår er gitt og ønsker nytt hus = legg til vekting
             if int(year or 0) != 0 and year1 == "true":
-                print("alt2_bygg")
+                #print("alt2_bygg")
                 if i.year >= int(year or 0)+15:
                     points += 3*2
                 elif int(year)+10 <= i.year < int(year or 0)+15:
@@ -159,7 +156,7 @@ def kart(request):
                     points += 1*2
             #Dersom byggeår ikke er gitt, men ønsker nytt hus = bruk gitte intervaller
             if int(year or 0) == 0 and year1 == "true":
-                print("alt3_bygg")
+                #print("alt3_bygg")
                 if i.year >= 2010:
                     points += 3
                 elif 1990 < int(i.year) <= 1990:
@@ -167,10 +164,9 @@ def kart(request):
                 else:
                     points += 1
 
-            print("poeng før pris: ", points)
             #Dersom makspris er fylt ut og ikke ønsker lav pris = flest poeng til boliger nærmest makspris
             if float(price or 0) != 0 and price1 != "true":
-                print("alt1")
+                #print("alt1")
                 if i.price >= 3*int(price)/4:
                     points += 3
                 elif i.price >= int(price)/2:
@@ -179,7 +175,7 @@ def kart(request):
                     points += 1
             #Dersom makspris er fylt ut, men ønsker lav pris = flest poeng til bolig med lavest pris
             elif float(price or 0) != 0 and price1 == "true":
-                print("alt2")
+                #print("alt2")
                 if i.price <= int(price)/3:
                     points += 3
                 elif i.price <= 2*int(price)/3:
@@ -188,21 +184,21 @@ def kart(request):
                     points += 1
             #Dersom makspris ikke er fylt ut, men ønsker lav pris = flest poeng til bolig med lavest pris (ser på hele databasen)
             elif float(price or 0) == 0 and price1 == "true":
-                print("alt3")
+                #print("alt3")
                 if i.price <= tot_min_price + (tot_max_price-tot_min_price)/3:
                     points += 3
                 elif i.price <= tot_min_price + (2*(tot_max_price-tot_min_price))/3:
                     points += 2
                 else:
                     points += 1
-            print("poeng etter pris: ", points)
+            #print("poeng etter pris: ", points)
             list_points.append(points)
             if points > max_points:
                 max_points = points
             if points < min_points:
                 min_points = points
-        print("maks: ", max_points, " min: ", min_points)
-        print("darkred:", min_points + 3*(max_points-min_points)/4, " red:", min_points + (max_points-min_points)/2, " lightred:", min_points + (max_points - min_points)/4)
+        #print("maks: ", max_points, " min: ", min_points)
+        #print("darkred:", min_points + 3*(max_points-min_points)/4, " red:", min_points + (max_points-min_points)/2, " lightred:", min_points + (max_points - min_points)/4)
 
         i = 0
         for item in list:
@@ -221,7 +217,7 @@ def kart(request):
             iframe = folium.IFrame(html(encoded.decode('UTF-8')), width=400, height=350)
 
             #iframe = folium.IFrame(html)
-            print(item.image)
+            #print(item.image)
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
 
             if list_points[i] >= min_points + 3*(max_points-min_points)/4:
@@ -342,23 +338,16 @@ def lage_bolig_annonse(request):
                 year=year
             )
             location1=geolocator.geocode(address+",Trondheim,Norway")
-            print(location1)
-            print(address)
-            print((location1.latitude,location1.longitude))
             try:
-                print((location1.latitude,location1.longitude))
                 if Bolig.objects.filter(address=address).exists():
                     messages.info(request,'Addresse er opptatt')
                     return redirect('lage_bolig_annonse')
-                    print('exists')
+                    #print('exists')
                 else:
                     hus.save()
-                    print('hello1')
                     return redirect('Bolig')
-                    print('saved')
-                print('hello2')
             except:
-                print("wrong address!")
+                #print("wrong address!")
                 messages.info(request, 'Wrong address!')
                 return render(request,'lage_bolig_annonse.html')
 

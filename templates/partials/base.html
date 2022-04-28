@@ -34,15 +34,20 @@
 
 
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <p> HELLO, {{ user.first_name }} </p></li>
-                <li class="nav-item">
-                <a class="nav-link" href="{% url 'log_out' %}">Log out</a>
-                  </li>
-                    <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'lage_bolig_annonse' %}">Lage boligannonse</a>
-                  </li>
-                    </li>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'log_out' %}">Logg ut</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'Bolig' %}">Hei,   {{ user.first_name }}!</a>
+            </li>
+
+
 
                 {% else %}
                  <li class="nav-item">
@@ -61,7 +66,9 @@
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
               </li>-->
-            </ul>
+
+
+            </ul>}
         </div>
     </div>
 </nav>
