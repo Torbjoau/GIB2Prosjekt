@@ -100,11 +100,11 @@ def kart(request):
 
         if type == 'alle':
             for i in Bolig.objects.all():
-                if ((i.price < float(price or 0) or form_inputs.getvalue("price") is None )) and (i.area > int(area or 0)) and (i.bedroom >= int(bedroom or 0)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
+                if (i.price < float(price or 0)) and (i.area > int(area or 0)) and (i.bedroom >= int(bedroom or 0)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
                     list.append(i)
         else:
             for i in Bolig.objects.all():
-                if ((i.price < float(price or 0) or form_inputs.getvalue("price") is None )) and (i.area > int(area or 0)) and i.type == type and (i.bedroom >= int(bedroom or 0)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
+                if ((i.price < float(price or 0) or form_inputs.getvalue("price") is None )) and (i.area > int(area or 0)) and (i.type == type) and (i.bedroom >= int(bedroom or 0)) and (energy != "true" or (ord(i.energy) <= ord(energy))) and (i.year >= int(year or 0)):
                     list.append(i)
 
 
@@ -121,8 +121,12 @@ def kart(request):
         for i in list:
             print("NY BOLIG")
             points = 0
+            # Ikke valgt energiklasse eller huket av
+            if energy is None and energy1 != "true":
+                print('alt3_energi')
+                points += 0
             #Dersom energiklasse er valgt, men ikke huket av for høy energiklasse
-            if energy1 != "true" and energy != "true":
+            elif energy1 != "true" and energy != "true":
                 print("alt1_energi")
                 if i.energy == 'A' or i.energy == 'B':
                     points += 3
@@ -131,7 +135,7 @@ def kart(request):
                 else:
                     points += 1
             #Derson energiklasse er valgt og huket av for høy energiklasse eller kun huket av for høy energiklasse
-            if (energy1 == "true" and energy != "true") or (energy1 == "true" and energy == "true"):
+            elif (energy1 == "true" and energy != "true") or (energy1 == "true" and energy == "true"):
                 if i.energy == 'A' or i.energy == 'B':
                     points += 3*2
                 elif i.energy == 'C' or i.energy == 'D':
@@ -246,13 +250,13 @@ def kart(request):
             Popup=folium.Popup(iframe, min_width=200, max_width=800)
 
             if list_points[i] >= min_points + 3*(max_points-min_points)/4:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(marker_cluster)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='darkred', icon='home')).add_to(m)
             elif min_points + (max_points-min_points)/2 <= list_points[i] < min_points + 3*(max_points-min_points)/4:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(marker_cluster)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='red', icon='home')).add_to(m)
             elif min_points + (max_points - min_points)/4 <= list_points[i] < min_points + (max_points - min_points)/2:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(marker_cluster)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='lightred', icon='home')).add_to(m)
             else:
-                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='white', icon='home')).add_to(marker_cluster)
+                folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon", icon=folium.Icon(color='white', icon='home')).add_to(m)
             
             i += 1
         m = m._repr_html_()
@@ -277,7 +281,7 @@ def kart(request):
             # iframe = folium.IFrame(html)
             Popup = folium.Popup(iframe, min_width=200, max_width=800)
             folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon",
-                          icon=folium.Icon(color='red', icon='home')).add_to(marker_cluster)
+                          icon=folium.Icon(color='red', icon='home')).add_to(m)
 
         m = m._repr_html_()
         context = {
