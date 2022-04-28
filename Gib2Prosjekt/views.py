@@ -281,7 +281,7 @@ def kart(request):
             # iframe = folium.IFrame(html)
             Popup = folium.Popup(iframe, min_width=200, max_width=800)
             folium.Marker(location=[g.latitude, g.longitude], popup=Popup, tooltip="trykk for mer informasjon",
-                          icon=folium.Icon(color='red', icon='home')).add_to(m)
+                          icon=folium.Icon(color='darkred', icon='home')).add_to(m)
 
         m = m._repr_html_()
         context = {
@@ -326,7 +326,7 @@ def log_in(request):
 
         if user is not None:
             auth.login(request,user)
-            return redirect('index')
+            return redirect('kart')
         else:
             messages.info(request,'Invalid')
             return render(request,'log_in.html')
@@ -337,7 +337,7 @@ def log_in(request):
 
 def log_out(request):
     auth.logout(request)
-    return redirect('index')
+    return redirect('kart')
 
 
 def lage_bolig_annonse(request):
