@@ -22,9 +22,6 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample04">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Hjem</a>
-                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'kart' %}">Kart</a>
@@ -33,6 +30,28 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'Bolig' %}">Bolig</a>
               </li>
+
+
+
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <p> HELLO, {{ user.first_name }} </p></li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'log_out' %}">Log out</a>
+                  </li>
+                    <li class="nav-item">
+                <a class="nav-link" href="{% url 'lage_bolig_annonse' %}">Lage boligannonse</a>
+                  </li>
+                    </li>
+
+                {% else %}
+                 <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                 <li class="nav-item">
+                <a class="nav-link" href="{% url 'log_in' %}">Log in</a>
+                  </li>
+                {% endif %}
                 <!--
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>

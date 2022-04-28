@@ -1,0 +1,23 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        {% if user == bolig_update.owner %}
+            <p> Delete </p>
+            <li>{{ bolig_update.address }}</li>
+            <li>{{ bolig_update.desc }}</li>
+            <li>{{ bolig_update.price }}</li>
+            <br/>
+            <form action="Delete2" method="POST">
+            {% csrf_token %}
+            <br/>
+            <input type="submit" value="Er du sikker?">
+            </form>
+        {% else %}
+            <h1> Hei, {{ user }} du eier ikke denne annonsen ... </h1>
+        {% endif %}
+    {% else %}
+        <h1>Hei, du må være logget inn for å se denne siden</h1>
+        <a href="{% url 'log_in' %}">Login her </a>
+    {% endif %}
+{% endblock %}
